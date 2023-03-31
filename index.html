@@ -23,7 +23,13 @@
   // initialize the map
   var map = L.map('map').setView([40, -89], 10);
  
-  L.marker([40.1, -89.1]).addTo(map);
+  var polygonPoints = [
+                [40, -89.1],
+                [40.1, -89.1],
+                [40.1, -89.15],
+                [40, -89.15]];
+
+var poly = L.polygon(polygonPoints).addTo(map);
 
   // load a tile layer
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
