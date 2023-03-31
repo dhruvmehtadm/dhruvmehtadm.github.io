@@ -22,6 +22,13 @@
 
   // initialize the map
   var map = L.map('map').setView([40, -89], 10);
+ 
+  var circle = L.circle([40.1, -89.1], {
+    color: 'blue',
+    fillColor: '#e4e3db',
+    fillOpacity: 0.25,
+    radius: 1000
+}).addTo(map);
 
   // load a tile layer
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
