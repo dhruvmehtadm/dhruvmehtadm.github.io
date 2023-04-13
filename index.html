@@ -12,6 +12,8 @@
       integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
       crossorigin=""
     ></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="leaflet-heat.js"></script>
     <style>
       #map {
         width: 600px;
@@ -71,8 +73,36 @@
         }
       ).addTo(map);
 
-      //function formats the shape color based on the attribute d's value
+      // marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+      var popup = L.popup();
 
+      function onMapClick(e) {
+        popup
+          .setLatLng(e.latlng)
+          .setContent("You clicked the map at " + e.latlng.toString())
+          .openOn(map);
+      }
+
+      map.on("click", onMapClick);
+
+      var info = L.control();
+
+      info.onAdd = function (map) {
+        this._div = L.DomUtil.create("div", "info"); // create a div with a class "info"
+        this.update();
+        return this._div;
+      };
+
+      info.update = function (edu) {
+        const contents = edu
+          ? `<b>${edu.EdNorm} %</b><br />${edu.CountyName}`
+          : "Hover over a county";
+        this._div.innerHTML = `<h4>Population with Bachelor's Degree</h4>${contents}`;
+      };
+
+      info.addTo(map);
+
+      //function formats the shape color based on the attribute d's value
       function getColor(EdNorm) {
         return EdNorm > 35.19
           ? "#BD0026"
@@ -107,11 +137,13 @@
         layer.bringToFront();
 
         //info.update(layer.feature.properties); //we will use this in a bit.
+        info.update(layer.feature.properties);
       }
 
       function resetHighlight(e) {
         geojson.resetStyle(e.target);
         //info.update();
+        info.update();
       }
 
       function onEachFeature(feature, layer) {
